@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Penal GTA RP - Brasil & EUA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '⚖️';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            padding: 25px;
+            margin: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+        }
+
+        .warning-box strong {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .search-box {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .filters {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: none;
+            background: #e0e7ff;
+            color: #4c1d95;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .category {
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+        }
+
+        .crime-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crime-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .crime-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .crime-title {
+            font-size: 1.3em;
+            color: #1e3c72;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .crime-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-artigo {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-pena {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-perpetua {
+            background: #1f2937;
+            color: #fff;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-morte {
+            background: #991b1b;
+            color: #fff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .crime-description {
+            color: #4b5563;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .gta-action {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+            margin-top: 10px;
+        }
+
+        .gta-action strong {
+            color: #1e40af;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .no-results-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+
+            .crime-card {
+                padding: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 18px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Código Penal GTA RP</h1>
+            <p class="subtitle">Brasil & Estados Unidos | Crimes, Penas e Multas</p>
+        </header>
+
+        <div class="warning-box">
+            <strong>⚠️ AVISO IMPORTANTE</strong>
+            Este site é apenas educacional e para roleplay em GTA RP. As ações descritas são virtuais e ilegais na vida real, sujeitas às penas indicadas conforme legislação brasileira e americana. GTA V é ficção para maiores de 18 anos.
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar crime, artigo ou descrição...">
+        </div>
+
+        <div class="filters" id="filters"></div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCrimes">0</div>
+                <div class="stat-label">Total de Crimes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalCategories">0</div>
+                <div class="stat-label">Categorias</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">18+</div>
+                <div class="stat-label">Classificação</div>
+            </div>
+        </div>
+
+        <div class="content" id="content"></div>
+
+        <footer>
+            <h3>📚 Referências Legais</h3>
+            <div class="footer-links">
+                <p>• Código Penal Brasileiro - Decreto-Lei nº 2.848/1940</p>
+                <p>• Código de Trânsito Brasileiro - Lei nº 9.503/1997</p>
+                <p>• Estatuto do Desarmamento - Lei nº 10.826/2003</p>
+                <p>• Lei de Drogas - Lei nº 11.343/2006</p>
+                <p>• US Code - Title 18 (Crimes and Criminal Procedure)</p>
+                <p style="margin-top: 20px;">Documento gerado para fins educacionais e de roleplay</p>
+            </div>
+        </footer>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimir</button>
+
+    <script>
+        const crimes = [
+            {
+                categoria: 'Crimes Contra a Vida',
+                emoji: '💀',
+                items: [
+                    {
+                        crime: 'Homicídio Simples',
+                        artigo: 'Art. 121',
+                        pena: '60 a 120 minutos',
+                        gtaAcao: 'Matar pessoas ou outros jogadores',
+                        descricao: 'Matar alguém'
+                    },
+                    {
+                        crime: 'Homicídio Qualificado',
+                        artigo: 'Art. 121, §2º',
+                        pena: '120 minutos ou Prisão Perpétua',
+                        tipo: 'perpetua',
+                        gtaAcao: 'Matar com crueldade, emboscada ou uso de explosivos',
+                        descricao: 'Mediante paga, motivo torpe, traição, emboscada ou recurso que dificulte defesa'
+                    },
+                    {
+                        crime: 'Lesão Corporal',
+                        artigo: 'Art. 129',
+                        pena: '10 a 20 minutos',
+                        gtaAcao: 'Agredir pessoas sem matar',
+                        descricao: 'Ofender a integridade corporal ou a saúde de outrem'
+                    },
+                    {
+                        crime: 'Lesão Corporal Grave',
+                        artigo: 'Art. 129, §1º',
+                        pena: '20 a 40 minutos',
+                        gtaAcao: 'Causar ferimentos graves que incapacitem a vítima',
+                        descricao: 'Resulta em incapacidade para ocupações habituais por mais de 30 dias'
+                    },
+                    {
+                        crime: 'Tortura',
+                        artigo: 'Lei 9.455/97',
+                        pena: '40 a 90 minutos',
+                        gtaAcao: 'Torturar reféns para obter informações/confissões (GTA RP)',
+                        descricao: 'Constranger com violência ou grave ameaça causando sofrimento físico ou mental'
+                    },
+                    {
+                        crime: 'Ameaça',
+                        artigo: 'Art. 147',
+                        pena: '5 a 15 minutos',
+                        gtaAcao: 'Ameaçar pessoas de morte ou violência (GTA RP)',
+                        descricao: 'Ameaçar alguém por palavra, escrito ou gesto, ou qualquer outro meio'
+                    }
+                ]
+            },
+            {
+                categoria: 'Crimes Contra o Patrimônio',
+                emoji: '💰',
+                items: [
+                    {
+                        crime: 'Furto',
+                        artigo: 'Art. 155',
+                        pena: '15 a 30 minutos',
+                        gtaAcao: 'Roubar veículos estacionados sem violência',
+                        descricao: 'Subtrair coisa alheia móvel'
+                    },
+                    {
+                        crime: 'Furto Qualificado',
+                        artigo: 'Art. 155, §4º',
+                        pena: '30 a 60 minutos',
+                        gtaAcao: 'Roubar usando lockpick, arrombamento ou escalada',
+                        descricao: 'Furto com destruição ou rompimento de obstáculo, abuso de confiança ou mediante fraude'
+                    },
+                    {
+                        crime: 'Roubo',
+                        artigo: 'Art. 157',
+                        pena: '45 a 90 minutos',
+                        gtaAcao: 'Roubar veículos com violência ou tirar motorista à força',
+                        descricao: 'Subtrair coisa móvel alheia mediante grave ameaça ou violência'
+                    },
+                    {
+                        crime: 'Roubo Qualificado',
+                        artigo: 'Art. 157, §2º',
+                        pena: '90 a 120 minutos',
+                        gtaAcao: 'Roubar com arma de fogo, explosivos ou em concurso',
+                        descricao: 'Com uso de arma, em concurso de pessoas ou com restrição de liberdade'
+                    },
+                    {
+                        crime: 'Roubo a Estabelecimento Comercial',
+                        artigo: 'Art. 157, §2º, I',
+                        pena: '90 a 120 minutos',
+                        gtaAcao: 'Roubar lojas, mercados, caixas registradoras (GTA RP)',
+                        descricao: 'Roubo com emprego de arma em estabelecimento comercial'
+                    },
+                    {
+                        crime: 'Roubo de Veículo',
+                        artigo: 'Art. 157, §2º-A',
+                        pena: '60 a 90 minutos',
+                        gtaAcao: 'Roubar carros, motos, caminhões com violência',
+                        descricao: 'Roubo de veículo automotor com emprego de violência ou grave ameaça'
+                    },
+                    {
+                        crime: 'Roubo a Banco/Instituição Financeira',
+                        artigo: 'Art. 157, §2º, I c/c Lei 7.492/86',
+                        pena: '120 minutos ou Prisão Perpétua',
+                        tipo: 'perpetua',
+                        gtaAcao: 'Assalto a bancos, cofres, transporte de valores (GTA RP)',
+                        descricao: 'Roubo em instituição financeira mediante violência ou grave ameaça'
+                    },
+                    {
+                        crime: 'Extorsão',
+                        artigo: 'Art. 158',
+                        pena: '45 a 90 minutos',
+                        gtaAcao: 'Forçar pessoas a entregar dinheiro com ameaças',
+                        descricao: 'Constranger alguém mediante violência ou grave ameaça a fazer algo'
+                    },
+                    {
+                        crime: 'Extorsão Mediante Sequestro',
+                        artigo: 'Art. 159',
+                        pena: '90 a 120 minutos',
+                        gtaAcao: 'Sequestrar para exigir resgate (GTA RP)',
+                        descricao: 'Sequestrar pessoa com fim de obter vantagem como condição de resgate'
+                    },
+                    {
+                        crime: 'Dano',
+                        artigo: 'Art. 163',
+                        pena: '5 a 15 minutos',
+                        gtaAcao: 'Destruir propriedades, veículos, vitrines',
+                        descricao: 'Destruir, inutilizar ou deteriorar coisa alheia'
+                    },
+                    {
+                        crime: 'Receptação',
+                        artigo: 'Art. 180',
+                        pena: '20 a 40 minutos',
+                        gtaAcao: 'Comprar/vender veículos roubados em ferros-velhos ilegais (GTA RP)',
+                        descricao: 'Adquirir, receber, transportar ou ocultar coisa que sabe ser produto de crime'
+                    }
+                ]
+            },
+            {
+                categoria: 'Crimes de Trânsito',
+                emoji: '🚗',
+                items: [
+                    {
+                        crime: 'Direção Perigosa',
+                        artigo: 'Art. 309 CTB',
+                        pena: '15 a 30 minutos',
+                        gtaAcao: 'Dirigir em alta velocidade, fazer rachas',
+                        descricao: 'Dirigir sem habilitação e gerar perigo de dano'
+                    },
+                    {
+                        crime: 'Racha/Competição não Autorizada',
+                        artigo: 'Art. 308 CTB',
+                        pena: '20 a 45 minutos',
+                        gtaAcao: 'Participar de corridas ilegais (GTA RP)',
+                        descricao: 'Participar de corrida, disputa ou competição automobilística não autorizada'
+                    },
+                    {
+                        crime: 'Homicídio Culposo no Trânsito',
+                        artigo: 'Art. 302 CTB',
+                        pena: '40 a 60 minutos',
+                        gtaAcao: 'Atropelar pedestres acidentalmente',
+                        descricao: 'Praticar homicídio culposo na direção de veículo'
+                    },
+                    {
+                        crime: 'Lesão Corporal Culposa no Trânsito',
+                        artigo: 'Art. 303 CTB',
+                        pena: '15 a 30 minutos',
+                        gtaAcao: 'Causar acidente com feridos',
+                        descricao: 'Praticar lesão corporal culposa na direção de veículo'
+                    },
+                    {
+                        crime: 'Fuga do Local',
+                        artigo: 'Art. 305 CTB',
+                        pena: '15 a 25 minutos',
+                        gtaAcao: 'Fugir após causar acidente',
+                        descricao: 'Afastar-se do local do acidente para fugir à responsabilidade'
+                    },
+                    {
+                        crime: 'Embriaguez ao Volante',
+                        artigo: 'Art. 306 CTB',
+              
